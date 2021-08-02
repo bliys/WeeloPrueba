@@ -1,7 +1,7 @@
 import internal from 'assert';
 import { Action, Reducer } from 'redux';
 import { AppThunkAction } from '.';
-import { AuthRequestInfo, executeReq } from '../common/Request';
+import { AuthRequestFormInfo, AuthRequestInfo, executeReq } from '../common/Request';
 
 
 const ADD_IMAGEN_PROPERTY = 'ADD_IMAGEN_PROPERTY';
@@ -13,19 +13,19 @@ const RECEIVE_LOAD_LIST_IMAGE_PROPERTY = 'RECEIVE_LOAD_LIST_IMAGE_PROPERTY';
 
 export interface AddImagenPropertyState {
     isLoading: boolean;
-    images: File[];
+    images: any[];
     idProperty: number;
     success:boolean;
 }
 
 interface RequestAddImagePropertyAction {
     type: typeof ADD_IMAGEN_PROPERTY;
-    image: File
+    image: any
 }
 
 interface RequestSaveImagesPropertyAction {
     type: typeof REQUEST_SAVE_IMAGE_PROPERTY;
-    images: File[]
+    images: any[]
 }
 
 interface ReceiveSaveImagesPropertyAction {
@@ -41,7 +41,7 @@ interface RequestLoadImagesPropertyAction {
 interface ReceiveLoadImagesPropertyAction {
     type: typeof RECEIVE_LOAD_LIST_IMAGE_PROPERTY;
     success:boolean;
-    images:File[]|undefined;
+    images:any[]|undefined;
 }
 
 type KnownAction = ReceiveSaveImagesPropertyAction | 
@@ -51,25 +51,30 @@ type KnownAction = ReceiveSaveImagesPropertyAction |
                     ReceiveLoadImagesPropertyAction;
 
 export const actionCreators = {
-    requestAddImage: (image:File): AppThunkAction<KnownAction> => (dispatch, getState) => {
+    requestAddImage: (image:any): AppThunkAction<KnownAction> => (dispatch, getState) => {
         dispatch({ type: ADD_IMAGEN_PROPERTY, image:image});         
     },
-    requestSaveImages: (images:File[]): AppThunkAction<KnownAction> => (dispatch, getState) => {
-        debugger
-        var myRequest = new Request('Api/Property/SaveImage', AuthRequestInfo());
-        executeReq<number[]>(myRequest)
-            .then(data => {
-                let success = false;
-                if(data.data!=undefined && data.data.length)
-                    success = true;
-            
-                dispatch({ type: RECEIVE_SAVE_IMAGE_PROPERTY, success : success});                                  
+    requestSaveImages: (images:any[]): AppThunkAction<KnownAction> => (dispatch, getState) => {
+        let idPrperty = getState().addImages.idProperty.toString();
+        for (let index = 0; index < images.length; index++) {
+            const file = images[index];
+            const formData = new FormData();
+            formData.append('PropertyId',idPrperty);
+            formData.append('Image',file);                
+            var myRequest = new Request('Api/Property/SaveImages', AuthRequestFormInfo(formData, 'POST'));
+            executeReq<number[]>(myRequest)
+              .then(data => {
+                  let success = false;
+                  if(data.data!=undefined && data.data.length)
+                      success = true;         
+                dispatch({ type: RECEIVE_SAVE_IMAGE_PROPERTY, success : success});                               
             });
-        dispatch({ type: REQUEST_SAVE_IMAGE_PROPERTY , images: images});
+            dispatch({ type: REQUEST_SAVE_IMAGE_PROPERTY , images: images});
+        }
     },
     requestLoadImages: (idProperty:number): AppThunkAction<KnownAction> => (dispatch, getState) => {
         var myRequest = new Request('Api/Property/LoadImages/'+idProperty, AuthRequestInfo());
-        executeReq<File[]>(myRequest)
+        executeReq<any[]>(myRequest)
             .then(data => {
                 let success = false;
                 if(data.data!=undefined && data.data.length){
@@ -101,12 +106,12 @@ export const reducer: Reducer<AddImagenPropertyState> = (state: AddImagenPropert
                 isLoading: false
             };
         case ADD_IMAGEN_PROPERTY:
+            debugger
             return {
-                ...state,                
-                images:[...state.images, action.image]
+                ...state,
+                images: state.images.concat(action.image)
             };
         case REQUEST_SAVE_IMAGE_PROPERTY:
-            debugger
             return {
                 ...state,
                 images: action.images,

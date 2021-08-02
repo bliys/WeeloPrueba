@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using WeeloPruebaExpertoFullStack.ET.PropertyET;
 using WeeloPruebaExpertoFullStack.SV.PropertySV;
@@ -32,6 +34,16 @@ namespace WeeloPruebaExpertoFullStack.Controllers
         {
             return Ok(_service.Create(property));
         }
+
+        [Authorize]
+        [Consumes("multipart/form-data")]
+        [HttpPost("SaveImages"), DisableRequestSizeLimit]
+        [RequestFormLimits(ValueCountLimit = Int32.MaxValue)]
+        public IActionResult Post([FromForm] SaveImagesRequest Data)
+        {
+            return Ok(1);
+        }
+
 
     }
 }

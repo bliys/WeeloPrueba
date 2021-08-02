@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
+using System.Collections.Generic;
 
 namespace WeeloPruebaExpertoFullStack.ET.PropertyET
 {
@@ -11,6 +13,11 @@ namespace WeeloPruebaExpertoFullStack.ET.PropertyET
         public string CodeInternal { get; set; }
         public int Year { get; set; }
         public int IdOwner { get; set; }
+    }
 
+    public class SaveImagesRequest
+    {
+        public int PropertyId { get; set; }
+        public IFormFile Image { get; set; }
     }
 }

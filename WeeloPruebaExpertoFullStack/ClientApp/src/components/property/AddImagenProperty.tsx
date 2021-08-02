@@ -15,19 +15,18 @@ import {
 } from "reactstrap";
 import "./Property.css";
 import { Link } from "react-router-dom";
+import { AuthRequestFormInfo, AuthRequestInfo, executeReq } from "../../common/Request";
 
 type ImagenAddPropertyProps = AddImaenPropertyStore.AddImagenPropertyState &
   typeof AddImaenPropertyStore.actionCreators &
   RouteComponentProps<{ index: string }>;
 
 interface IState {
-  images: File[];
   idProperty: number;
 }
 
 class AddImagenProperty extends React.PureComponent<ImagenAddPropertyProps> {
   state: Readonly<IState> = {
-    images: [],
     idProperty: 0,
   };
 
@@ -41,37 +40,26 @@ class AddImagenProperty extends React.PureComponent<ImagenAddPropertyProps> {
 
   public onFileChange = (e: any) => {
     if(e.target.files){
-        for (let index = 0; index < e.target.files.length; index++) {
-            const file = e.target.files[index];
-            this.setState({ images: [...this.state.images, file] });
-            this.props.requestAddImage(file);
-        }
+      for (let index = 0; index < e.target.files.length; index++) {
+          const file = e.target.files[index];
+          /* var reader = new FileReader();
+          reader.readAsDataURL(file);
+          reader.onload = function(e) {
+              var img = $('#image_preview');
+              img.attr('src', this.result);
+          } */
+          this.props.requestAddImage(file);       
+      }
+      e.target.value='';
     }    
   };
 
   public submitLogin = (e: React.SyntheticEvent) => {
     e.preventDefault();
 
-    /* if (!this.state.images.length || this.state.idProperty === 0) {
-      return;
-    } */
-
-    /* const formData = new FormData();
-
-    formData.append(
-      "files",
-      this.state.images[0],
-      this.state.images[0].name
-    );
-
-    // Details of the uploaded file
-    console.log(this.state.images); */
-    
-    this.props.requestSaveImages(this.props.images);
-
-    if (this.props.success) {
-      this.clearData();
-    }
+    if(this.props.images){
+      this.props.requestSaveImages(this.props.images)      
+    }  
   };
 
   public handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -83,46 +71,26 @@ class AddImagenProperty extends React.PureComponent<ImagenAddPropertyProps> {
     this.props.requestLoadImages(index);
   }
 
-  private clearData() {
-    this.setState({
-      Name: "",
-      Address: "",
-      Price: 0,
-      CodeInternal: 0,
-      Year: 0,
-      IdOwner: 0,
-    });
-  }
-
   public render() {
     return (
       <React.Fragment>
         <h1>Add images property</h1>
         <br />
-        <Form className="margin-2" onSubmit={this.submitLogin}>
+        <Form className="margin-2">
           <FormGroup>
             <Label for="exampleFile">File</Label>
             <Input
               type="file"
               name="file"
               id="exampleFile"
-              accept="image/png, image/jpeg"
+              accept="image/*"
               multiple
               onChange={this.onFileChange}
             />
             <FormText color="muted">
-              This is some placeholder block-level help text for the above
-              input. It's a bit lighter and easily wraps to a new line.
+              Please select the images for the prperty
             </FormText>
-          </FormGroup>
-
-          <Row form className="row-reverse">
-            <Col md={3}>
-              <Button type="submit" className="btn btn-weelo">
-                Save
-              </Button>
-            </Col>
-          </Row>
+          </FormGroup>         
         </Form>
 
         <div className="margin-2">
@@ -130,18 +98,30 @@ class AddImagenProperty extends React.PureComponent<ImagenAddPropertyProps> {
           <table className="table table-striped" aria-labelledby="tabelLabel">
             <thead>
               <tr>
-                <th>IdProperty</th>
-                <th>Name</th>
-                <th>Address</th>
-                <th>Price</th>
-                <th>CodeInternal</th>
-                <th>Year</th>
-                <th>IdOwner</th>
-                <th>Options</th>
+                <th>Image</th>
+                <th style={{width:100}}>Enable</th>
+                <th style={{width:100}}>Options</th>
               </tr>
             </thead>
-            <tbody></tbody>
+            <tbody>
+              {this.props.images && this.props.images.map((img: any) =>  (
+                <tr key={img['lastModified']}>
+                    <td><img style={{width:100}} src={URL.createObjectURL(img)}/></td>
+                    <td><input type="checkbox" value='1' /></td>
+                    <td><Link className='btn btn-weelo btn-sm' to={`/removeImage/`+img['name']}>Remove</Link></td>
+                </tr>)
+              )}
+            </tbody>
           </table>
+
+          <Row form className="row-reverse">
+            <Col md={3}>
+              <Button type="button" onClick={this.submitLogin} className="btn btn-weelo">
+                Save
+              </Button>
+            </Col>
+          </Row>
+
         </div>
       </React.Fragment>
     );
@@ -149,7 +129,7 @@ class AddImagenProperty extends React.PureComponent<ImagenAddPropertyProps> {
 }
 
 export default connect(
-  (state: ApplicationState) => state.property,
+  (state: ApplicationState) => state.addImages,
   AddImaenPropertyStore.actionCreators
 )(AddImagenProperty as any);
 

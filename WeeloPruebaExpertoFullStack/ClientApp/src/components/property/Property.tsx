@@ -234,7 +234,7 @@ class Property extends React.PureComponent<PropertyProps> {
                     <td>{property.year}</td>
                     <td>{property.idOwner}</td>
                     {/* <td><button className="btn btn-weelo">Add images</button></td> */}
-                    <td><Link className='btn btn-weelo btn-sm' to={`/addimages/${property.idProperty}`}>Next</Link></td>
+                    <td><Link className='btn btn-weelo btn-sm' to={`/addimages/${property.idProperty}`}>Add Images</Link></td>
 
                 </tr>
                 )

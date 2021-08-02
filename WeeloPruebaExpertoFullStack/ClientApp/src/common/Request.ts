@@ -27,8 +27,22 @@ export const AuthRequestInfo = (data?:any,method:string='GET')=>{
         mode: 'cors',
         cache: 'default'
         };
+        
         if(data)
             requestInfo.body = JSON.stringify(data);
+            
+    return requestInfo;
+}
+
+export const AuthRequestFormInfo = (data?:any,method:string='GET')=>{
+    var headers = new Headers();
+    headers.append('Authorization', 'Bearer ' + localStorage.getItem('token'));
+    
+    const requestInfo: RequestInit = { 
+        method: method,
+        headers: headers,
+        body: data
+    };
             
     return requestInfo;
 }

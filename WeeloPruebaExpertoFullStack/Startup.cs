@@ -5,6 +5,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using WeeloPruebaExpertoFullStack.DA;
+using WeeloPruebaExpertoFullStack.SV.OwnerSV;
+using WeeloPruebaExpertoFullStack.SV.PropertySV;
 using WeeloPruebaExpertoFullStack.SV.Security;
 using WeeloPruebaExpertoFullStack.SV.UserSV;
 
@@ -34,6 +36,8 @@ namespace WeeloPruebaExpertoFullStack
             services.Configure<DataBaseSettings>(Configuration.GetSection("DataBase"));
             services.Configure<JwtSettings>(Configuration.GetSection("Jwt"));
             services.AddScoped<IUserSV, UserSV>();
+            services.AddScoped<IPropertySV, PropertySV>();
+            services.AddScoped<IOwnerSV, OwnerSV>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

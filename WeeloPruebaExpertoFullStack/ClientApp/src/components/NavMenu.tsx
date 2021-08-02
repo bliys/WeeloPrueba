@@ -9,11 +9,15 @@ export default class NavMenu extends React.PureComponent<{}, { isOpen: boolean }
     };
 
     public render() {
+        const logout=()=>{
+            localStorage.removeItem('token');
+            window.location.reload();           
+        }
         return (
             <header>
                 <Navbar className="navbar-expand-sm navbar-toggleable-sm border-bottom box-shadow mb-3" light>
                     <Container>
-                        <NavbarBrand tag={Link} to="/">WeeloPruebaExpertoFullStack</NavbarBrand>
+                        <NavbarBrand tag={Link} to="/">Weelo</NavbarBrand>
                         <NavbarToggler onClick={this.toggle} className="mr-2"/>
                         <Collapse className="d-sm-inline-flex flex-sm-row-reverse" isOpen={this.state.isOpen} navbar>
                             <ul className="navbar-nav flex-grow">
@@ -24,7 +28,10 @@ export default class NavMenu extends React.PureComponent<{}, { isOpen: boolean }
                                     <NavLink tag={Link} className="text-dark" to="/counter">Counter</NavLink>
                                 </NavItem>
                                 <NavItem>
-                                    <NavLink tag={Link} className="text-dark" to="/fetch-data">Fetch data</NavLink>
+                                    <NavLink tag={Link} className="text-dark" to="/property">Property</NavLink>
+                                </NavItem>
+                                <NavItem>
+                                    <NavLink tag={Link} onClick={logout} to="/" className="text-dark">Salir</NavLink>
                                 </NavItem>
                             </ul>
                         </Collapse>

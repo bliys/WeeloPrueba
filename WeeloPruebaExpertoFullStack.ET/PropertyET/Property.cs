@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace WeeloPruebaExpertoFullStack.ET.Property
+namespace WeeloPruebaExpertoFullStack.ET.PropertyET
 {
     public class Property
     {
@@ -8,7 +8,8 @@ namespace WeeloPruebaExpertoFullStack.ET.Property
         public string Name { get; set; }
         public string Address { get; set; }
         public decimal Price { get; set; }
-        public DateTime Year { get; set; }
+        public string CodeInternal { get; set; }
+        public int Year { get; set; }
         public int IdOwner { get; set; }
 
     }

@@ -1,0 +1,12 @@
+.margin-2{
+    margin-bottom: 2em;
+}
+
+.row-reverse{
+    flex-direction:row-reverse;
+}
+
+.w-100px{
+    width: 100px;
+}
+

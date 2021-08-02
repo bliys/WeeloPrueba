@@ -11,13 +11,13 @@ type LoginProps = LoginStore.LoginState &
 
 interface IState {
   user: string;
-  pass: string;
+  password: string;
 }
 
 class Login extends React.PureComponent<LoginProps> {
   state: Readonly<IState> = {
     user: "",
-    pass: "",
+    password: "",
   };
 
   constructor(props: LoginProps) {
@@ -32,12 +32,12 @@ class Login extends React.PureComponent<LoginProps> {
 
   public submitLogin = (e: React.SyntheticEvent) => {
     e.preventDefault();
-
-    if (this.state.user.trim() === "" || this.state.pass.trim() === "") {
+debugger
+    if (this.state.user.trim() === "" || this.state.password.trim() === "") {
       return;
     }
 
-    this.props.requestLogin(this.state.user, this.state.pass);
+    this.props.requestLogin(this.state.user, this.state.password);
   };
 
   public handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -53,14 +53,14 @@ class Login extends React.PureComponent<LoginProps> {
               <div className="col-lg-6">
                 <div className="card1 pb-5">
                   <div className="row">
-                    <img src="./img/logo200x100.png" className="logo" alt="" />{" "}
+                    <img src="./images/logo.png" className="logo" alt="" />{" "}
                   </div>
                   <div className="row px-3 justify-content-center mt-4 border-line">
-                    <img src="./img/react.png" className="image" alt="" />
+                    <img src="./images/react.png" className="image" alt="" />
                   </div>
                   <div className="row px-3 justify-content-center mt-4 message-p">
-                    <p>React Js | Redux</p>
-                    <span className="message-b">Training</span>
+                    <p>Prueba Weelo | FullStack</p>
+                    <span className="message-b">Alvaro Steven</span>
                   </div>
                 </div>
               </div>
@@ -91,16 +91,16 @@ class Login extends React.PureComponent<LoginProps> {
                       required
                       className="input-login"
                       type="password"
-                      name="pass"
+                      name="password"
                       placeholder="Constraseña"
-                      value={this.state.pass}
+                      value={this.state.password}
                       onChange={this.handleInputChange}
                     />
                   </div>
 
                   <div className="row mb-3 px-3">
-                    <button type="submit" className="btn btn-red text-center">
-                      Iniciar sesion{this.props.isLoading && <img alt="" style={{width:20, marginLeft:20}} src="./img/loading.gif" />}
+                    <button type="submit" className="btn btn-weelo text-center">
+                      Iniciar sesion{this.props.isLoading && <img alt="" style={{width:20, marginLeft:20}} src="./images/loading.gif" />}
 
                     </button>
                   </div>

@@ -8,13 +8,17 @@ import Login from './components/Login';
 import PrivateRoute from './routes/privateRoute';
 
 import './custom.css'
+import Property from './components/property/Property';
+import AddImagenProperty from './components/property/AddImagenProperty';
 
 export default () => {
     const comp = (localStorage.getItem('token')) ? 
     <Layout>
         <PrivateRoute exact path='/' component={Home} />
         <PrivateRoute path='/counter' component={Counter} />
-        <PrivateRoute path='/fetch-data/:startDateIndex?' component={FetchData} />
+        <PrivateRoute path='/fetch' component={FetchData} />
+        <PrivateRoute path='/property' component={Property} />
+        <PrivateRoute path='/addimages/:index?' component={AddImagenProperty} />
     </Layout> 
     :<React.Fragment> 
         <Route exact path='/login' component={Login} />

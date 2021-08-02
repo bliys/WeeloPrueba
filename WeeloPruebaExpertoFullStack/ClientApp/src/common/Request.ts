@@ -15,7 +15,7 @@ export const SimpleRequestInfo = (data:any,method:string)=>{
     return requestInfo;
 }
 
-export const AuthRequestInfo = (data:any,method:string)=>{
+export const AuthRequestInfo = (data?:any,method:string='GET')=>{
     var headers = new Headers();
     headers.append('Accept', 'application/json, text/plain');
     headers.append('Content-Type', 'application/json;charset=UTF-8');
@@ -25,9 +25,11 @@ export const AuthRequestInfo = (data:any,method:string)=>{
         method: method,
         headers: headers,
         mode: 'cors',
-        cache: 'default',
-        body : JSON.stringify(data)
+        cache: 'default'
         };
+        if(data)
+            requestInfo.body = JSON.stringify(data);
+            
     return requestInfo;
 }
 

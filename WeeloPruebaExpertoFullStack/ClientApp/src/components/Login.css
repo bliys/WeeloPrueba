@@ -102,15 +102,15 @@ a {
     cursor: pointer
 }
 
-.btn-red {
-    background-color: #C10206 !important;
+.btn-weelo {
+    background-color: #0B46EB !important;
     width: 100%;
     color: #fff !important;
     border-radius: 2px
 }
 
-.btn-red:hover {
-    background-color: #C10206 !important;
+.btn-weelo:hover {
+    background-color: #0B46EB !important;
     cursor: pointer;
     color: #fff !important;
 }
@@ -123,14 +123,14 @@ a {
 }
 
 .btn-lightgray:hover {
-    background-color: #C10206 !important;
+    background-color: #0B46EB !important;
     cursor: pointer;
     color: #fff !important;
 }
 
 .bg-blue {
     color: #fff;
-    background-color: #C10206
+    background-color: #0B46EB
 }
 
 .message-b {

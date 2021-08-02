@@ -21,7 +21,7 @@ export interface LoginResponse {
 
 export interface LoginRequest {
     user:string;
-    pass:string;
+    password:string;
 }
 
 interface RequestLoginAction {
@@ -40,10 +40,10 @@ type KnownAction = RequestLoginAction | ReceiveLoginAction;
 
 
 export const actionCreators = {
-    requestLogin: (user:string , pass:string): AppThunkAction<KnownAction> => (dispatch, getState) => {
+    requestLogin: (user:string , password:string): AppThunkAction<KnownAction> => (dispatch, getState) => {
         const appState = getState();
-        if (appState && appState.login && user !== null && pass != null) {
-            var myRequest = new Request('Api/Login', SimpleRequestInfo({user, pass},'POST'));
+        if (appState && appState.login && user !== null && password != null) {
+            var myRequest = new Request('Api/Login', SimpleRequestInfo({user, password},'POST'));
             executeReq<LoginResponse>(myRequest)
                 .then(data => {
                     let success = (data.data!=undefined && data.data.token.length>0);

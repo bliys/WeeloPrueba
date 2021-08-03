@@ -19,5 +19,7 @@ namespace WeeloPruebaExpertoFullStack.ET.PropertyET
     {
         public int PropertyId { get; set; }
         public IFormFile Image { get; set; }
+
+        public bool Enable { get; set; }
     }
 }

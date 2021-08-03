@@ -42,13 +42,13 @@ class AddImagenProperty extends React.PureComponent<ImagenAddPropertyProps> {
     if(e.target.files){
       for (let index = 0; index < e.target.files.length; index++) {
           const file = e.target.files[index];
-          /* var reader = new FileReader();
-          reader.readAsDataURL(file);
-          reader.onload = function(e) {
-              var img = $('#image_preview');
-              img.attr('src', this.result);
-          } */
-          this.props.requestAddImage(file);       
+          const image:AddImaenPropertyStore.ImageET = {
+            enable :true,
+            file: file,
+            fileurl :'',
+            IdProperty: this.props.idProperty
+          }
+          this.props.requestAddImage(image);       
       }
       e.target.value='';
     }    
@@ -104,11 +104,11 @@ class AddImagenProperty extends React.PureComponent<ImagenAddPropertyProps> {
               </tr>
             </thead>
             <tbody>
-              {this.props.images && this.props.images.map((img: any) =>  (
-                <tr key={img['lastModified']}>
-                    <td><img style={{width:100}} src={URL.createObjectURL(img)}/></td>
+              {this.props.images && this.props.images.map((img: AddImaenPropertyStore.ImageET) =>  (
+                <tr key={img.fileurl ? img.fileurl : img.file['lastModified']}>
+                    <td><img style={{width:100}} src={img.fileurl ? img.fileurl : URL.createObjectURL(img.file)}/></td>
                     <td><input type="checkbox" value='1' /></td>
-                    <td><Link className='btn btn-weelo btn-sm' to={`/removeImage/`+img['name']}>Remove</Link></td>
+                    <td><Link className='btn btn-weelo btn-sm' to={`/removeImage/`}>Remove</Link></td>
                 </tr>)
               )}
             </tbody>
@@ -132,85 +132,3 @@ export default connect(
   (state: ApplicationState) => state.addImages,
   AddImaenPropertyStore.actionCreators
 )(AddImagenProperty as any);
-
-/* import axios from "axios";
-
-import React, { Component } from "react";
-
-class App extends Component {
-  state = {
-    // Initially, no file is selected
-    selectedFile: null,
-  };
-
-  // On file select (from the pop up)
-  onFileChange = (event) => {
-    // Update the state
-    this.setState({ selectedFile: event.target.files[0] });
-  };
-
-  // On file upload (click the upload button)
-  onFileUpload = () => {
-    // Create an object of formData
-    const formData = new FormData();
-
-    // Update the formData object
-    formData.append(
-      "myFile",
-      this.state.selectedFile,
-      this.state.selectedFile.name
-    );
-
-    // Details of the uploaded file
-    console.log(this.state.selectedFile);
-
-    // Request made to the backend api
-    // Send formData object
-    axios.post("api/uploadfile", formData);
-  };
-
-  // File content to be displayed after
-  // file upload is complete
-  fileData = () => {
-    if (this.state.selectedFile) {
-      return (
-        <div>
-          <h2>File Details:</h2>
-
-          <p>File Name: {this.state.selectedFile.name}</p>
-
-          <p>File Type: {this.state.selectedFile.type}</p>
-
-          <p>
-            Last Modified:{" "}
-            {this.state.selectedFile.lastModifiedDate.toDateString()}
-          </p>
-        </div>
-      );
-    } else {
-      return (
-        <div>
-          <br />
-          <h4>Choose before Pressing the Upload button</h4>
-        </div>
-      );
-    }
-  };
-
-  render() {
-    return (
-      <div>
-        <h1>GeeksforGeeks</h1>
-        <h3>File Upload using React!</h3>
-        <div>
-          <input type="file" onChange={this.onFileChange} />
-          <button onClick={this.onFileUpload}>Upload!</button>
-        </div>
-        {this.fileData()}
-      </div>
-    );
-  }
-}
-
-export default App;
- */

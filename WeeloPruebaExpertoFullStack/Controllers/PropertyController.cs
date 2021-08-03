@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using WeeloPruebaExpertoFullStack.ET.PropertyET;
 using WeeloPruebaExpertoFullStack.SV.PropertySV;
 
@@ -14,10 +16,12 @@ namespace WeeloPruebaExpertoFullStack.Controllers
     public class PropertyController : ControllerBase
     {
         private IPropertySV _service;
+        private readonly IWebHostEnvironment _env;
 
-        public PropertyController(IPropertySV service)
+        public PropertyController(IPropertySV service, IWebHostEnvironment env)
         {
             _service = service;
+            _env = env;
         }
 
 
@@ -26,6 +30,13 @@ namespace WeeloPruebaExpertoFullStack.Controllers
         public IActionResult Get(int index)
         {
             return Ok(_service.ListProperty(index));
+        }
+
+        [Authorize]
+        [HttpGet("LoadImages")]
+        public IActionResult LoadImages(int propertyId)
+        {
+            return Ok(_service.ListImage(propertyId));
         }
 
         [Authorize]
@@ -40,8 +51,8 @@ namespace WeeloPruebaExpertoFullStack.Controllers
         [HttpPost("SaveImages"), DisableRequestSizeLimit]
         [RequestFormLimits(ValueCountLimit = Int32.MaxValue)]
         public IActionResult Post([FromForm] SaveImagesRequest Data)
-        {
-            return Ok(1);
+        {            
+            return Ok(_service.SaveImage(Data, _env.ContentRootPath));
         }
 
 

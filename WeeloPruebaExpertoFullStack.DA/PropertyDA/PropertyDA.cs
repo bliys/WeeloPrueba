@@ -32,5 +32,26 @@ namespace WeeloPruebaExpertoFullStack.DA.PropertyDA
             };
             return Helper.Common.ExecuteStoreProcedure<Property>("SP_Property_G", listParam);
         }
+
+        public virtual PropertyResponse SaveImage(PropertyImage image)
+        {
+            StoreProcedureParamList listParam = new()
+            {
+                new StoreProcedureParam { NombreParametro = "@pfileUrl", Valor = image.fileurl },
+                new StoreProcedureParam { NombreParametro = "@pIdProperty", Valor = image.IdProperty },
+                new StoreProcedureParam { NombreParametro = "@pEnabled", Valor = image.Enable }
+            };
+            return Helper.Common.ExecuteStoreProcedure<PropertyResponse>("SP_PropertyImage_I", listParam).FirstOrDefault();
+        }
+
+        public virtual IList<PropertyImage> ListImage(int propertyId)
+        {
+            StoreProcedureParamList listParam = new()
+            {
+                new StoreProcedureParam { NombreParametro = "@pIdProperty", Valor = propertyId }
+
+            };
+            return Helper.Common.ExecuteStoreProcedure<PropertyImage>("SP_PropertyImageByIdProperty_G", listParam);
+        }
     }
 }

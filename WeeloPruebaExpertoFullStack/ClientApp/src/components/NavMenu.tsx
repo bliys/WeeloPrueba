@@ -11,7 +11,7 @@ export default class NavMenu extends React.PureComponent<{}, { isOpen: boolean }
     public render() {
         const logout=()=>{
             localStorage.removeItem('token');
-            window.location.reload();           
+            window.location.replace('/');    
         }
         return (
             <header>
@@ -23,9 +23,6 @@ export default class NavMenu extends React.PureComponent<{}, { isOpen: boolean }
                             <ul className="navbar-nav flex-grow">
                                 <NavItem>
                                     <NavLink tag={Link} className="text-dark" to="/">Home</NavLink>
-                                </NavItem>
-                                <NavItem>
-                                    <NavLink tag={Link} className="text-dark" to="/counter">Counter</NavLink>
                                 </NavItem>
                                 <NavItem>
                                     <NavLink tag={Link} className="text-dark" to="/property">Property</NavLink>

@@ -13,19 +13,30 @@ const RECEIVE_LOAD_LIST_IMAGE_PROPERTY = 'RECEIVE_LOAD_LIST_IMAGE_PROPERTY';
 
 export interface AddImagenPropertyState {
     isLoading: boolean;
-    images: any[];
+    images: ImageET[];
     idProperty: number;
     success:boolean;
 }
 
+export interface ImageET  {
+    file:any,
+    enable:boolean,
+    fileurl:string,
+    IdProperty:number
+}
+
+interface PropertyResponse {
+    id: number;
+}
+
 interface RequestAddImagePropertyAction {
     type: typeof ADD_IMAGEN_PROPERTY;
-    image: any
+    image: ImageET
 }
 
 interface RequestSaveImagesPropertyAction {
     type: typeof REQUEST_SAVE_IMAGE_PROPERTY;
-    images: any[]
+    images: ImageET[]
 }
 
 interface ReceiveSaveImagesPropertyAction {
@@ -51,30 +62,32 @@ type KnownAction = ReceiveSaveImagesPropertyAction |
                     ReceiveLoadImagesPropertyAction;
 
 export const actionCreators = {
-    requestAddImage: (image:any): AppThunkAction<KnownAction> => (dispatch, getState) => {
+    requestAddImage: (image:ImageET): AppThunkAction<KnownAction> => (dispatch, getState) => {
         dispatch({ type: ADD_IMAGEN_PROPERTY, image:image});         
     },
-    requestSaveImages: (images:any[]): AppThunkAction<KnownAction> => (dispatch, getState) => {
+    requestSaveImages: (images:ImageET[]): AppThunkAction<KnownAction> => (dispatch, getState) => {
         let idPrperty = getState().addImages.idProperty.toString();
         for (let index = 0; index < images.length; index++) {
-            const file = images[index];
-            const formData = new FormData();
-            formData.append('PropertyId',idPrperty);
-            formData.append('Image',file);                
-            var myRequest = new Request('Api/Property/SaveImages', AuthRequestFormInfo(formData, 'POST'));
-            executeReq<number[]>(myRequest)
-              .then(data => {
-                  let success = false;
-                  if(data.data!=undefined && data.data.length)
-                      success = true;         
-                dispatch({ type: RECEIVE_SAVE_IMAGE_PROPERTY, success : success});                               
-            });
-            dispatch({ type: REQUEST_SAVE_IMAGE_PROPERTY , images: images});
+            const image = images[index];
+            if(image.file){
+                const formData = new FormData();
+                formData.append('PropertyId',idPrperty);
+                formData.append('Image',image.file);                
+                var myRequest = new Request('Api/Property/SaveImages', AuthRequestFormInfo(formData, 'POST'));
+                executeReq<PropertyResponse>(myRequest)
+                  .then(data => {
+                      let success = false;
+                      if(data.data!=undefined)
+                          success = true;         
+                    dispatch({ type: RECEIVE_SAVE_IMAGE_PROPERTY, success : success});                               
+                });
+                dispatch({ type: REQUEST_SAVE_IMAGE_PROPERTY , images: images});
+            }            
         }
     },
     requestLoadImages: (idProperty:number): AppThunkAction<KnownAction> => (dispatch, getState) => {
-        var myRequest = new Request('Api/Property/LoadImages/'+idProperty, AuthRequestInfo());
-        executeReq<any[]>(myRequest)
+        var myRequest = new Request('Api/Property/LoadImages/?propertyId='+idProperty, AuthRequestInfo());
+        executeReq<ImageET[]>(myRequest)
             .then(data => {
                 let success = false;
                 if(data.data!=undefined && data.data.length){
